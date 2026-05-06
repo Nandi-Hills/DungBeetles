@@ -63,9 +63,53 @@
         position: static !important; 
         transform: none !important;
     }
-    .goog-tooltip { display: none !important; }
-    .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
-    #google_translate_element { display: none !important; }
+    
+    /* --- KILL THE HOVER POPUP & MOBILE BUBBLE --- */
+    #goog-gt-tt, 
+    .goog-te-balloon-frame,
+    div[id^="goog-gt-"] { 
+        display: none !important; 
+    }
+    .goog-tooltip { 
+        display: none !important; 
+    }
+    .goog-text-highlight { 
+        background-color: transparent !important; 
+        border: none !important; 
+        box-shadow: none !important; 
+        pointer-events: none !important; 
+    }
+    #google_translate_element { 
+        display: none !important; 
+    }
+    
+    /* --- THE ABSOLUTE NUKE FOR THE MOBILE FLOATING WIDGET --- */
+    .VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
+    .VIpgJd-ZVi9od-aZ2wEe-wOHMyf-ti6hGc,
+    .VIpgJd-ZVi9od-ORHb-OEVmcd,
+    body > .skiptranslate {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+    
+    /* --- NEW ADDITIONS TO KILL THE HOVER POPUP --- */
+    #goog-gt-tt, .goog-te-balloon-frame { 
+        display: none !important; 
+    }
+    .goog-tooltip { 
+        display: none !important; 
+    }
+    .goog-text-highlight { 
+        background-color: transparent !important; 
+        border: none !important; 
+        box-shadow: none !important; 
+        pointer-events: none !important; /* Stops the cursor from triggering the invisible box */
+    }
+    #google_translate_element { 
+        display: none !important; 
+    }
 
     /* NAV */
     nav {
@@ -439,13 +483,41 @@ background: linear-gradient(to right,
       .loop-accordion { flex-direction: column; height: auto !important; }
       .loop-panel { flex: none !important; height: 210px; transition: height .55s cubic-bezier(.4,0,.2,1); }
       .loop-panel.is-active { height: 380px; }
-      /* Fix 2: clip idle description to ~1 line (~5-6 words) on mobile when collapsed */
+      /* --- MOBILE SHORT DESCRIPTIONS --- */
+      /* Hides the long desktop text and positions the new text above the badge */
       .lp-desc-idle {
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        font-size: .8rem;
+        font-size: 0 !important; 
+        position: absolute;
+        bottom: 3.2rem; /* Sits exactly above the 1.2rem TAP TO VIEW badge */
+        right: 1.2rem;
+        margin: 0;
+        padding: 0;
+      }
+      
+      /* Injects the condensed 1-liners based on the panel's data-key */
+      .loop-panel[data-key="harvest"] .lp-desc-idle::after {
+        content: 'Collect pickups or fight for the center.';
+        font-size: 0.72rem;
+        color: var(--muted);
+        letter-spacing: 0.05em;
+      }
+      .loop-panel[data-key="roll"] .lp-desc-idle::after {
+        content: 'Build massive rolls for raw momentum.';
+        font-size: 0.72rem;
+        color: var(--muted);
+        letter-spacing: 0.05em;
+      }
+      .loop-panel[data-key="escort"] .lp-desc-idle::after {
+        content: 'Coordinate formations & break lines.';
+        font-size: 0.72rem;
+        color: var(--muted);
+        letter-spacing: 0.05em;
+      }
+      .loop-panel[data-key="bank"] .lp-desc-idle::after {
+        content: 'Store resources to invest in defenses.';
+        font-size: 0.72rem;
+        color: var(--muted);
+        letter-spacing: 0.05em;
       }
       /* When active the idle layer is hidden anyway, but keep full text readable */
       .loop-panel.is-active .lp-desc-idle { display: none; }
@@ -611,20 +683,35 @@ background: linear-gradient(to right,
     .mobile-nav-cta button{width:100%;padding:.9rem;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;}
 
     @media (max-width: 900px) { 
-      /* MOBILE NAV SQUISHER - Prevents JP text from covering the logo */
-      nav { padding: 0.8rem 1rem !important; }
-      .nav-right { gap: 0.3rem !important; }
-      .lang-toggle { margin-right: 0.3rem !important; }
+      /* MOBILE NAV FIX - Allows wrapping without removing buttons */
+      nav { 
+        padding: 0.8rem 1rem !important; 
+        flex-wrap: wrap; /* Allows contents to wrap to a second row */
+        padding-right: 4rem !important; /* Leaves room for the pinned hamburger */
+      }
+      .nav-logo { 
+        font-size: 1.2rem !important; 
+        white-space: nowrap !important; /* Prevents vertical stacking of logo */
+        margin-bottom: 0.2rem;
+      }
+      .nav-right { 
+        gap: 0.4rem !important; 
+        flex-wrap: wrap; /* Allows buttons to wrap gracefully */
+      }
+      .lang-toggle { margin-right: 0.2rem !important; }
       .lang-btn { padding: 0.3rem 0.5rem !important; font-size: 0.6rem !important; }
       .nav-wip, .nav-cta, .nav-back { 
         padding: 0.4rem 0.6rem !important; 
         font-size: 0.55rem !important; 
         white-space: nowrap !important;
       }
-      .nav-logo { font-size: 1.2rem !important; flex-shrink: 0; }
-
-      /* Keeps your hamburger menu working */
-      .nav-hamburger { display: flex; } 
+      /* Pin the hamburger to the top right so it never moves */
+      .nav-hamburger { 
+        display: flex !important; 
+        position: absolute; 
+        top: 0.8rem; 
+        right: 1rem; 
+      } 
     }
 @media (max-width: 900px) {
   /* FIX: Removes the BG Image and the Fade Overlay on Mobile Only */
@@ -651,7 +738,29 @@ background: linear-gradient(to right,
         grid-template-columns: 1fr !important; 
         gap: 3rem; 
       }
+      /* --- MOBILE AFFORDANCE FOR GAMEPLAY LOOP --- */
+    /* Adds a pulsing "Tap to View" badge to closed panels */
+    .loop-panel:not(.is-active) .lp-idle::after {
+      content: '[ TAP TO VIEW ▾ ]';
+      position: absolute;
+      bottom: 1.2rem;
+      right: 1.2rem;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--amber-glow);
+      background: rgba(6, 4, 2, 0.85);
+      border: 1px solid rgba(212, 135, 10, 0.4);
+      padding: 0.35rem 0.6rem;
+      pointer-events: none; /* Prevents the badge from blocking the tap */
+      animation: pulseTap 2s infinite;
+    }
 
+    /* Makes the badge bounce slightly to catch the eye */
+    @keyframes pulseTap {
+      0%, 100% { opacity: 0.5; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(3px); }
+    }
       .role-card {
         padding: 0 1rem 2rem 1rem; 
       }
@@ -1045,7 +1154,7 @@ background: linear-gradient(to right,
     <li><a href="#">Press Kit</a></li>
     <li><a href="#">Privacy</a></li>
   </ul>
-  <p class="footer-copy">© 2024 The Crazy Capitaan Studios</p>
+  <p class="footer-copy">© 2024 The Crazy Capitaan Studios·</p>
 </footer>
 
 <script>

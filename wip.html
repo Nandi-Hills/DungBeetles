@@ -49,9 +49,53 @@
         position: static !important; 
         transform: none !important;
     }
-    .goog-tooltip { display: none !important; }
-    .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
-    #google_translate_element { display: none !important; }
+    
+    /* --- KILL THE HOVER POPUP & MOBILE BUBBLE --- */
+    #goog-gt-tt, 
+    .goog-te-balloon-frame,
+    div[id^="goog-gt-"] { 
+        display: none !important; 
+    }
+    .goog-tooltip { 
+        display: none !important; 
+    }
+    .goog-text-highlight { 
+        background-color: transparent !important; 
+        border: none !important; 
+        box-shadow: none !important; 
+        pointer-events: none !important; 
+    }
+    #google_translate_element { 
+        display: none !important; 
+    }
+    
+    /* --- THE ABSOLUTE NUKE FOR THE MOBILE FLOATING WIDGET --- */
+    .VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
+    .VIpgJd-ZVi9od-aZ2wEe-wOHMyf-ti6hGc,
+    .VIpgJd-ZVi9od-ORHb-OEVmcd,
+    body > .skiptranslate {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+    
+    /* --- NEW ADDITIONS TO KILL THE HOVER POPUP --- */
+    #goog-gt-tt, .goog-te-balloon-frame { 
+        display: none !important; 
+    }
+    .goog-tooltip { 
+        display: none !important; 
+    }
+    .goog-text-highlight { 
+        background-color: transparent !important; 
+        border: none !important; 
+        box-shadow: none !important; 
+        pointer-events: none !important; /* Stops the cursor from triggering the invisible box */
+    }
+    #google_translate_element { 
+        display: none !important; 
+    }
     /* NAV */
     nav{position:fixed;top:0;left:0;right:0;z-index:600;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 3rem;backdrop-filter:blur(22px) saturate(180%);background:rgba(6,4,2,.82);border-bottom:1px solid var(--border);transition:padding .3s;}
     .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.12em;color:var(--amber-glow);text-decoration:none;}
@@ -435,7 +479,33 @@
     .wip-mobile-nav-cta{margin-top:1.5rem;}
     .wip-mobile-nav-cta a{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.15em;text-transform:uppercase;text-align:center;padding:.9rem;border:1px solid var(--amber);color:var(--amber-glow);text-decoration:none;display:block;transition:background .25s;}
     .wip-mobile-nav-cta a:hover{background:rgba(212,135,10,.15);}
-@media(max-width:900px){.nav-hamburger{display:flex;}.nav-back{display:none;}.wip-badge{font-size:.6rem;}.nav-links{display:none;}}
+@media(max-width:900px) {
+      nav { 
+        padding: 0.8rem 1rem !important; 
+        flex-wrap: wrap; 
+        padding-right: 4rem !important; 
+      }
+      .nav-logo { 
+        white-space: nowrap !important; /* Fixes vertical logo glitch */
+        margin-bottom: 0.2rem;
+      }
+      .nav-right { 
+        gap: 0.4rem !important; 
+        flex-wrap: wrap; 
+      }
+      .wip-badge { 
+        font-size: 0.6rem; 
+        white-space: nowrap !important; /* Fixes vertical text glitch */
+      }
+      .nav-links { display: none; }
+      .nav-back { display: none; }
+      .nav-hamburger { 
+        display: flex !important; 
+        position: absolute; 
+        top: 0.8rem; 
+        right: 1rem; 
+      }
+    }
 /* Centered portrait container with reduced width to shrink vertical height */
 .role-img { 
   width: 70%; /* Reduced from 100% to make the card smaller vertically */
